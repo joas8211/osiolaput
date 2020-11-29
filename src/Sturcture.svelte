@@ -8,7 +8,7 @@
      * Add new part to the structure.
      */
     function addNewPart() {
-        structure.push('');
+        structure.push({});
         structure = structure;
     }
 
@@ -24,10 +24,11 @@
      * @param {string} part
      */
     function getColor(part) {
-        const uniqueParts = structure.filter(
-            (item, index, array) => array.indexOf(item) == index
+        const partNames = structure.map(part => part.name);
+        const uniquePartNames = partNames.filter(
+            (value, index, array) => array.indexOf(value) == index
         );
-        const index = uniqueParts.indexOf(part);
+        const index = uniquePartNames.indexOf(part.name);
         return palette[index] || '#CCCCCC';
     }
 </script>
@@ -42,15 +43,25 @@
     }
 
     .part {
-        font-size: 3vw;
-        height: 5em;
+        height: 20vw;
         background-color: #CCCCCC;
         padding: 10px;
-        text-align: center;
-        line-height: 5em;
         color: white;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .part .name {
+        font-size: 3vw;
         white-space: nowrap;
         overflow: hidden;
+        margin-bottom: 1em;
+    }
+
+    .part .info {
+        font-size: 1.75vw;
     }
 
     @media screen and (max-width: 992px) {
@@ -58,7 +69,7 @@
             grid-template-columns: 100fr;
         }
 
-        .part {
+        .part .name {
             font-size: 3em;
         }
     }
@@ -74,7 +85,8 @@
     <div class="structure">
         {#each structure as part}
             <div class="part" style="background-color: {getColor(part)};">
-                <Text bind:value={part} placeholder="#" />
+                <div class="name"><Text bind:value={part.name} placeholder="#" /></div>
+                <div class="info"><Text bind:value={part.info} multiline={true} placeholder="1x" /></div>
             </div>
         {/each}
     </div>
